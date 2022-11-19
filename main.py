@@ -1,9 +1,14 @@
-from crypt import methods
 from flask import Flask, json, request
+import argparse
 
-companies = [{"id": 1, "name": "Company One"}, {"id": 2, "name": "Company Two"}]
+parser = argparse.ArgumentParser()
+parser.add_argument(dest='port', help="Port number where this server starts up at.")
 
-filename = "hello.txt"
+# Parse and print the results
+args, _ = parser.parse_known_args()
+port = args.port
+
+FILENAME = "hello.txt"
 
 app = Flask(__name__)
 
@@ -11,24 +16,15 @@ app = Flask(__name__)
 def healthCheck():
     return "Alive", 200
 
-@app.route("/companies")
-def home():
-    return json.dumps(companies)
-
-@app.route('/companies', methods=['POST'])
-def add_income():
-    companies.append(request.get_json())
-    return '', 200
-
 @app.route("/file", methods=["POST"])
 def file():
     if request.is_json:
         rqst = request.get_json()
         file_update = rqst["content"]
-        with open(filename, "a") as myfile:
+        with open(FILENAME, "a") as myfile:
             myfile.write(file_update)
         return "OK", 200
     return {"error": "Request must be JSON"}, 415
     
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=port)
