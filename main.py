@@ -1,32 +1,16 @@
-from flask import Flask, json, request
+import controller
+from controller import app
+import argparse
 
-companies = [{"id": 1, "name": "Company One"}, {"id": 2, "name": "Company Two"}]
+# Parse initialization parameters
+parser = argparse.ArgumentParser()
+parser.add_argument('--host', default="127.0.0.1", dest='host', help='Host IP address where this server starts up at.')
+parser.add_argument('--port', default="8002", dest='port', help="Port number where this server starts up at.")
 
-filename = "hello.json"
-
-app = Flask(__name__)
-
-@app.route('/health/')
-def healthCheck():
-    return "Alive", 200
-
-@app.route('/companies')
-def home():
-    return json.dumps(companies)
-
-@app.route('/companies', methods=['POST'])
-def add_income():
-    companies.append(request.get_json())
-    return '', 200
-
-@app.route("/file", methods=['GET', 'POST'])
-def file():
-    if request.is_json:
-        rqst = request.get_json()
-        with open(filename, "a") as myfile:
-            json.dump(rqst, myfile)
-        return "OK", 200
-    return {"error": "Request must be JSON"}, 415
+args, _ = parser.parse_known_args()
+port = args.port
+host = args.host
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    controller.NODE_URL = "http://" + str(host) + ":" + str(port)  # Makes the node URL consistent
+    app.run(debug=True, host=host, port=port)

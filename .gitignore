@@ -128,3 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 hello.txt
+
+#IDE Folders
+.idea/
