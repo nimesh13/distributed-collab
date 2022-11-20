@@ -1,8 +1,11 @@
-from flask import Flask, json, request
+from flask import Flask, json, request, redirect, render_template, url_for
 import requests
+import os
 
 FILENAME = "hello.txt"
 NODE_URL = "http://127.0.0.1:8002"
+
+filename = "calendar.json"
 
 # Tracking variables for gossip
 NEIGHBOURS = []
@@ -10,6 +13,29 @@ RECEIVED_MESSAGE_IDS = []
 
 app = Flask(__name__)
 
+@app.route("/", methods=["GET", "POST"])
+def home():
+    # Create json file if it doesn't exist
+    if not os.path.exists(filename):
+        with open(filename, 'w') as f:
+            json.dump([], f)
+
+    # Load local json
+    json_file = open(filename)
+    json_obj = json.load(json_file)
+
+    if request.method == "POST":
+        content = json.dumps(request.form, indent=4)
+        json_obj.append(json.loads(content))
+
+        # Update local json file
+        with open(filename, "w") as f:
+            json.dump(json_obj, f, indent=4, separators=(',', ': '))
+
+        return redirect(url_for('home'))
+
+    # Render User Interface
+    return render_template("home.html", data=json.dumps(json_obj, indent=4))
 
 @app.route("/health")
 def healthCheck():

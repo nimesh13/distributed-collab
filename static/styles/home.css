@@ -1,0 +1,302 @@
+body {
+  background: #dddddd;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0px;
+}
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f6f6f6;
+  height: 100%;
+  overflow: auto;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+}
+
+.sidebar a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+calendarbody {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  font-family: Inter, "DINPro", sans-serif;
+  padding: 1rem;
+  margin: 0;
+  background: #dddddd;
+  box-sizing: border-box;
+  height: 100vh;
+  width: 60%;
+
+}
+
+eventmanagement {
+  flex-direction: column;
+  display: flex;
+  font-family: Inter, sans-serif, Arial;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  left: 50px;
+  bottom: 185px;
+}
+
+.calendar {
+  margin: 0 auto;
+  max-width: 100%;
+  min-width: 500px;
+  box-shadow: 0px 30px 50px rgba(0, 0, 0, 0.2) ,0px 3px 7px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+thead {
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+thead th {
+  text-align: center;
+  width: 100%;
+}
+
+header {
+  border-radius: 10px 10px 0px 0px;
+  background: #3EB489;
+  padding: 1rem;
+  text-align: center;
+}
+
+header h1 {
+ font-size: 1.25rem;
+ text-align: center;
+ font-weight: normal;
+}
+
+table {
+  border-radius: 0px 0px 10px 10px;
+  background: #fff;
+  width: 100%;
+  height: 7%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.blankspace {
+  width: 60px;
+  padding: 0.25rem 0;
+}
+
+.headcol {
+  width: 60px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+  padding: 0.25rem 0;
+  text-align: center;
+  border: 0;
+  position: relative;
+  top: -12px;
+  border-bottom: 1px solid transparent;
+}
+
+thead th {
+  font-size: 1rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.9);
+  padding: 1rem;
+}
+
+thead {
+    background: white;
+    border-bottom: 2px solid #ddd;
+}
+
+tr, tr td {
+  height: 25px;
+
+}
+td {
+  text-align: center;
+
+}
+tr:nth-child(odd) td:not(.headcol) {
+  border-bottom: 1px solid #cccccc;
+}
+
+tr:nth-child(even) td:not(.headcol) {
+  border-bottom: 1px solid #cccccc;
+}
+
+tr td {
+  border-right: 1px solid #cccccc;
+  padding: 0;
+  white-space: none;
+  word-wrap: nowrap;
+}
+
+.checkbox {
+   display: none;
+}
+
+.checkbox + label {
+    border: 0;
+    outline: 0;
+    width: 100px;
+    heigth: 100px;
+    background: white;
+    color: transparent;
+    display:block;
+  display: none;
+}
+
+.checkbox:checked + label {
+    border: 0;
+    outline: 0;
+    width: 100%;
+    heigth: 100%;
+    background: red;
+    color: transparent;
+    display: inline-block;
+}
+
+.event {
+  background: #8560b3;
+  color: white;
+  border-radius: 4px;
+  text-align: left;
+  font-size: 0.875rem;
+  z-index: 2;
+  padding: 0rem;
+  overflow-x: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+  top: 12.5px
+}
+
+
+.event.double {
+  height: 200%;
+}
+
+.button {
+ background-color: #3d5fcc;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+eventhead {
+  position: relative;
+  background-color: #8560b3;
+  border: none;
+  color: white;
+  padding: 15px 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 4px 10px;
+  border-radius: 8px 8px 0px 0px;
+  width: 100%;
+}
+
+eventinfo {
+    background: white;
+    display = show;
+    position: relative;
+    height: 275px;
+    width: 325px;
+    border-radius: 0px 0px 8px 8px;
+    box-shadow: 0px 30px 50px rgba(0, 0, 0, 0.2) ,0px 3px 7px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-input {
+  display: block;
+  padding:10px 5px;
+  margin: 5 auto;
+  border: 1px solid rgb(114, 114, 114);
+  border-radius:10px;
+  box-shadow: 0 1px 0 rgba(24, 24, 24, 0.1);
+  box-sizing: border-box;
+  width: 95%;
+}
+
+
+.radiolabel {
+  display: inline-block;
+  text-align: center;
+  margin: 4px;
+  padding: 3px;
+}
+.radiolabel label {
+  display: block;
+}
+
+.dropdown{
+    background: #d3c5fc;
+    border-radius: 2px;
+    height: 25px;
+    font-family: Inter, sans-serif, Arial;
+    font-weight: bold;
+}
+
+.createbutton{
+  background-color: #3EB489;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  margin: 20px auto;
+  display: block;
+  font-weight: bold;
+}
+
+.deletebutton {
+  position: relative;
+  background-color: #E95842;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  position: relative;
+  top: 100px;
+}

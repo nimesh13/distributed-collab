@@ -1,0 +1,22 @@
+[
+    {
+        "day": "Sun",
+        "endhour": "4",
+        "endmin": "00",
+        "endtime": "PM",
+        "starthour": "2",
+        "startmin": "00",
+        "starttime": "PM",
+        "title": "Group Meeting"
+    },
+    {
+        "day": "Tue",
+        "endhour": "6",
+        "endmin": "00",
+        "endtime": "PM",
+        "starthour": "4",
+        "startmin": "30",
+        "starttime": "PM",
+        "title": "CS249 Class"
+    }
+]
