@@ -18,5 +18,15 @@
         "startmin": "30",
         "starttime": "PM",
         "title": "CS249 Class"
+    },
+    {
+        "day": "Thu",
+        "endhour": "11",
+        "endmin": "00",
+        "endtime": "AM",
+        "starthour": "10",
+        "startmin": "00",
+        "starttime": "AM",
+        "title": "New Meeting"
     }
 ]
