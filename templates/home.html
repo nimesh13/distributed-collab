@@ -1,0 +1,238 @@
+<head>
+  <title>Collaborative Tools</title>
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/home.css') }}">
+  <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+  <script src="{{url_for('static', filename='home.js')}}"></script>
+</head>
+
+<body>
+  <div class="sidebar">
+    <a class="active" href="#home">Calendar</a>
+    <a href="#meetings">Meetings</a>
+    <a href="#chatroom">Chat Room</a>
+  </div>
+
+  <calendarbody>
+    <div><button class="button" type="button" name="connect_button"><strong>CONNECT</strong></button></div>
+    <div class="calendar">
+      <header>
+          <h1 class="" style="flex: 1; font-size: 27px;"><span></span><strong>NOVEMBER 2022</strong></h1>
+      </header>
+      <table>
+      <thead>
+        <tr  style = "height: 70px">
+           <th>Sunday</th>
+           <th>Monday</th>
+           <th>Tuesday</th>
+           <th>Wednesday</th>
+           <th>Thursday</th>
+           <th>Friday</th>
+           <th>Saturday</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style = "background: #edf0f5;">
+            <div style="color: #919191;">30</div>
+          </td>
+          <td style = "background: #edf0f5;">
+            <div style="color: #919191;">31</div>
+          </td>
+          <td>
+            <div>1</div>
+            <div id="Nov1"></div>
+          </td>
+          <td>
+            <div>2</div>
+            <div id="Nov2"></div>
+          </td>
+          <td>
+            <div>3</div>
+            <div id="Nov3"></div>
+          </td>
+          <td>
+            <div>4</div>
+            <div id="Nov4"></div>
+          </td>
+          <td>
+            <div>5</div>
+            <div id="Nov5"></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>6</div>
+            <div id="Nov6"></div>
+          </td>
+         <td>
+            <div>7</div>
+            <div id="Nov7"></div>
+          </td>
+          <td>
+            <div>8</div>
+            <div id="Nov8"></div>
+          </td>
+          <td>
+            <div>9</div>
+            <div id="Nov9"></div>
+          </td>
+         <td>
+            <div>10</div>
+            <div id="Nov10"></div>
+          </td>
+          <td>
+            <div>11</div>
+            <div id="Nov11"></div>
+          </td>
+          <td>
+            <div>12</div>
+            <div id="Nov12"></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>13</div>
+            <div id="Nov13"></div>
+          </td>
+          <td>
+            <div>14</div>
+            <div id="Nov14"></div>
+          </td>
+          <td>
+            <div>15</div>
+            <div id="Nov15"></div>
+          </td>
+          <td>
+            <div>16</div>
+            <div id="Nov16"></div>
+          </td>
+          <td>
+            <div>17</div>
+            <div id="Nov17"></div>
+          </td>
+          <td>
+            <div>18</div>
+            <div id="Nov18"></div>
+          </td>
+          <td>
+            <div>19</div>
+            <div id="Nov19"></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>20</div>
+            <div id="Nov20"></div>
+          </td>
+         <td>
+            <div>21</div>
+            <div id="Nov21"></div>
+          </td>
+          <td>
+            <div>22</div>
+            <div id="Nov22"></div>
+          </td>
+          <td>
+            <div>23</div>
+            <div id="Nov23"></div>
+          </td>
+          <td>
+            <div>24</div>
+            <div id="Nov24"></div>
+          </td>
+          <td>
+            <div>25</div>
+            <div id="Nov25"></div>
+          </td>
+          <td>
+            <div>26</div>
+            <div id="Nov26"></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>27</div>
+            <div id="Nov27"></div>
+          </td>
+         <td>
+            <div>28</div>
+            <div id="Nov28"></div>
+          </td>
+          <td>
+            <div>29</div>
+            <div id="Nov29"></div>
+          </td>
+          <td>
+            <div>30</div>
+            <div id="Nov30"></div>
+          </td>
+          <td style = "background: #edf0f5;">
+            <div style="color: #919191;">1</div>
+          </td>
+          <td style = "background: #edf0f5;">
+            <div style="color: #919191;">2</div>
+          </td>
+          <td style="background: #edf0f5;">
+              <div style="color: #919191;">3</div>
+          </td>
+        </tr>
+      </tbody>
+      </table>
+    </div>
+
+    </div>
+  </calendarbody>
+
+  <eventmanagement>
+    <eventhead ><strong>New Event</strong></eventhead>
+    <eventinfo>
+      <form action="{{ url_for('home') }}" method="post">
+        <input type="text" class="rounded-input" name="title" placeholder="Title" required/>
+        <div style ="padding: 1rem;">
+          <label style="padding: 3px; font-size:20px;">Date: </label>
+          <label style="font-size: 20px; margin: 5px;"><strong> November </strong></label>
+          <select class="dropdown" style="width:50px; height: 30px; font-size:17px;" name="day">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+          </select>
+          <label style="font-size: 20px; margin: 5px;"><strong> 2022 </strong></label>
+        </div>
+        <input class= "createbutton" type="submit" value="Add Event"/>
+      </form>
+      <script type="text/javascript">
+        myVar = addEvents({{data|tojson}})
+      </script>
+    </eventinfo>
+    <form action="{{ url_for('handleDelete') }}" method="post">
+        <button id="delete_button" class="deleteButton" name="delete" value=0 onclick="removeEvent()" disabled><strong>Remove Event</strong></button>
+    </form>
+  </eventmanagement>
+</body>

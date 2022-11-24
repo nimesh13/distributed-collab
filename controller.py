@@ -1,14 +1,64 @@
-from flask import Flask, json, request
+from flask import Flask, json, request, redirect, render_template, url_for
 import requests
+import os
 
 FILENAME = "hello.txt"
 NODE_URL = "http://127.0.0.1:8002"
+
+filename = "calendar.json"
 
 # Tracking variables for gossip
 NEIGHBOURS = []
 RECEIVED_MESSAGE_IDS = []
 
 app = Flask(__name__)
+
+@app.route("/", methods=["GET", "POST"])
+def home():
+    # Create json file if it doesn't exist
+    if not os.path.exists(filename):
+        with open(filename, 'w') as f:
+            json.dump([], f)
+
+    # Load local json
+    json_file = open(filename)
+    json_obj = json.load(json_file)
+
+    # Append event(json object)
+    if request.method == "POST":
+        content = json.dumps(request.form, indent=4)
+        json_obj.append(json.loads(content))
+
+        # Update local json file
+        with open(filename, "w") as f:
+            json.dump(json_obj, f, indent=4, separators=(',', ': '))
+
+        return redirect(url_for('home'))
+
+    # Render User Interface
+    return render_template("home.html", data=json.dumps(json_obj, indent=4))
+
+@app.route("/delete", methods=["GET", "POST"])
+def handleDelete():
+    # Open local json file
+    json_file = open(filename)
+    json_obj = json.load(json_file)
+
+    # Get json from post request
+    data = request.form['delete']
+    objRemove = json.loads(data)
+
+    # Pop event(json object)
+    for idx, obj in enumerate(json_obj):
+        if obj['day'] == objRemove['day'] and obj['title'] == objRemove['title']:
+            json_obj.pop(idx)
+
+    # Update local replica
+    with open(filename, "w") as f:
+        json.dump(json_obj, f, indent=4, separators=(',', ': '))
+
+    return redirect(url_for('home'))
+
 
 @app.route("/health")
 def healthCheck():

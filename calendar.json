@@ -1,0 +1,22 @@
+[
+    {
+        "day": "24",
+        "title": "Thanksgiving"
+    },
+    {
+        "day": "20",
+        "title": "Group Meeting 2:00pm - 3:00pm"
+    },
+    {
+        "day": "4",
+        "title": "Testing a very long title that should be more than two lines long"
+    },
+    {
+        "day": "30",
+        "title": "Project Presentation"
+    },
+    {
+        "day": "30",
+        "title": "Code Submission"
+    }
+]
