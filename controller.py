@@ -13,6 +13,7 @@ RECEIVED_MESSAGE_IDS = []
 
 app = Flask(__name__)
 
+
 @app.route("/", methods=["GET", "POST"])
 def home():
     # Create json file if it doesn't exist
@@ -37,6 +38,7 @@ def home():
 
     # Render User Interface
     return render_template("home.html", data=json.dumps(json_obj, indent=4))
+
 
 @app.route("/delete", methods=["GET", "POST"])
 def handleDelete():
@@ -87,6 +89,11 @@ def file():
     return {"error": "Request must be JSON"}, 415
 
 
+@app.route("/neighbours", method=["GET"])
+def getNeighbours():
+    return {"neighbours": NEIGHBOURS}
+
+
 # Function for forwarding a message to all neighbours
 # Basis of gossip protocol
 # Should only be called if the node has not previously received the message before
@@ -95,9 +102,18 @@ def forwardMessage(command, json):
         requests.post(neighbour + command, json=json)
 
 
-# Function for adding neighbours
-# Has a check against adding an already existing neighbour
-def addNeighbour(IP, port):
+# Wrapper for adding neighbours
+def addNeighbourByIPAndPort(IP, port):
     neighbour_string = "http://" + str(IP) + ":" + str(port)
+    addNeighbourFromString(neighbour_string)
+
+
+# Function for adding neighbours
+def addNeighbourFromString(neighbour_string):
     if neighbour_string not in NEIGHBOURS:
         NEIGHBOURS.append(neighbour_string)
+    new_neighbours_dict = requests.get(neighbour_string + "/neighbours").json()
+    new_neighbours = new_neighbours_dict['neighbours']
+    for n in new_neighbours:
+        if n not in NEIGHBOURS:
+            NEIGHBOURS.append(n)
