@@ -1,6 +1,10 @@
 from flask import Flask, json, request, redirect, render_template, url_for
 import requests
 import os
+from time import time
+
+from hlc import HLC
+from copy import deepcopy
 
 FILENAME = "hello.txt"
 NODE_URL = "http://127.0.0.1:8002"
@@ -12,10 +16,13 @@ NEIGHBOURS = []
 RECEIVED_MESSAGE_IDS = []
 
 app = Flask(__name__)
+hlc = app.config.get('clock')
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    hlc = app.config.get('clock')
+    lww = app.config.get('lww')
     # Create json file if it doesn't exist
     if not os.path.exists(filename):
         with open(filename, 'w') as f:
@@ -28,7 +35,16 @@ def home():
     # Append event(json object)
     if request.method == "POST":
         content = json.dumps(request.form, indent=4)
-        json_obj.append(json.loads(content))
+
+        hlc.incr(int(time()))
+        new_hlc = deepcopy(hlc)
+        
+        create_event = json.loads(content)
+        
+        unique_id = create_event['day'] + create_event['title']
+        noop = lww.addSet(unique_id, new_hlc)
+        
+        json_obj.append(create_event)
 
         # Update local json file
         with open(filename, "w") as f:
@@ -61,16 +77,13 @@ def handleDelete():
 
     return redirect(url_for('home'))
 
-
 @app.route("/health")
 def healthCheck():
     return "Alive", 200
 
-
 @app.route("/query")
 def queryNode():
     return requests.get(NODE_URL + "/health").content
-
 
 @app.route("/file", methods=["POST"])
 def file():
