@@ -2,7 +2,7 @@ from flask import Flask, json, request, redirect, render_template, url_for
 import requests
 import os
 from time import time
-
+from utils import getUniqueId
 from copy import deepcopy
 
 FILENAME = "hello.txt"
@@ -40,7 +40,7 @@ def home():
         
         create_event = json.loads(content)
         
-        unique_id = create_event['day'] + create_event['title']
+        unique_id = getUniqueId(create_event)
         op_success = lww.addSet(unique_id, new_hlc)
         
         json_obj.append(create_event)
@@ -52,7 +52,7 @@ def home():
         return redirect(url_for('home'))
 
     # Render User Interface
-    return render_template("home.html", data=json.dumps(json_obj, indent=4))
+    return render_template("home.html", data=lww.toJSON())
 
 
 @app.route("/delete", methods=["GET", "POST"])
