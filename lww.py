@@ -46,6 +46,10 @@ class LWW:
 
         return operation
     
+    def merge(self, add, remove) -> bool:
+        operation = False
+        pass
+    
     def toJSON(self):
         output= []
         for event in self.add.keys():
