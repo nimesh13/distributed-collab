@@ -5,10 +5,7 @@ from time import time
 from utils import getUniqueId
 from copy import deepcopy
 
-FILENAME = "hello.txt"
 NODE_URL = "http://127.0.0.1:8002"
-
-filename = "calendar.json"
 
 # Tracking variables for gossip
 NEIGHBOURS = []
@@ -25,23 +22,16 @@ def home():
     # Append event(json object)
     if request.method == "POST":
         event_method = request.form['method']
-
+        hlc.incr(int(time()))
+        new_hlc = deepcopy(hlc)
+        event = json.loads(json.dumps(request.form))
+        
         if event_method == "POST":
-            content = json.dumps(request.form, indent=4)
-
-            hlc.incr(int(time()))
-            new_hlc = deepcopy(hlc)
-            
-            create_event = json.loads(content)
-            
-            unique_id = getUniqueId(create_event)
+            unique_id = getUniqueId(event)
             op_success = lww.addSet(unique_id, new_hlc)
-
-            return redirect(url_for('home'))
-
         elif event_method == "DELETE":
-            print("deleted")
-            return redirect(url_for('home'))
+            unique_id = getUniqueId(event)
+            op_success = lww.removeSet(unique_id, new_hlc)
 
     # Render User Interface
     return render_template("home.html", data=lww.toJSON())
@@ -53,22 +43,6 @@ def healthCheck():
 @app.route("/query")
 def queryNode():
     return requests.get(NODE_URL + "/health").content
-
-@app.route("/file", methods=["POST"])
-def file():
-    if request.is_json:
-        rqst = request.get_json()
-        file_update = rqst["content"]
-        update_id = rqst["id"]
-        if update_id in RECEIVED_MESSAGE_IDS:
-            return "OK", 200
-        else:
-            RECEIVED_MESSAGE_IDS.append(update_id)
-            with open(FILENAME, "a") as myfile:
-                myfile.write(file_update)
-            forwardMessage("/file", rqst)
-            return "OK", 200
-    return {"error": "Request must be JSON"}, 415
 
 @app.route("/neighbours", methods=["GET"])
 def getNeighbours():
