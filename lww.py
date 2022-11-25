@@ -1,4 +1,6 @@
 from hlc import HLC
+from utils import getEvent
+from json import dumps
 
 class LWW:
     def __init__(self) -> None:
@@ -43,3 +45,10 @@ class LWW:
             operation = True
 
         return operation
+    
+    def toJSON(self):
+        output= []
+        for event in self.add.keys():
+            output.append(getEvent(event))
+        
+        return dumps(output)
