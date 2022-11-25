@@ -233,8 +233,8 @@
       </script>
     </eventinfo>
     <form action="{{ url_for('home') }}" onsubmit="removeEvent()" method="post">
-      <input type="hidden" id="removeDay" name="removeDay" value="0">
-      <input type="hidden" id="removeTitle" name="removeTitle" value="0">
+      <input type="hidden" id="removeDay" name="day" value="0">
+      <input type="hidden" id="removeTitle" name="title" value="0">
       <input type="hidden" id="methodDelete" name="method" value="DELETE">
       <input class= "deleteButton" id="delete_button" type="submit" value="Remove Event" disabled/>
     </form>
