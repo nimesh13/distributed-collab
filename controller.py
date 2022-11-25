@@ -17,7 +17,6 @@ RECEIVED_MESSAGE_IDS = []
 app = Flask(__name__)
 hlc = app.config.get('clock')
 
-
 @app.route("/", methods=["GET", "POST"])
 def home():
     hlc = app.config.get('clock')
@@ -53,7 +52,6 @@ def home():
 
     # Render User Interface
     return render_template("home.html", data=lww.toJSON())
-
 
 @app.route("/delete", methods=["GET", "POST"])
 def handleDelete():
@@ -100,11 +98,9 @@ def file():
             return "OK", 200
     return {"error": "Request must be JSON"}, 415
 
-
 @app.route("/neighbours", methods=["GET"])
 def getNeighbours():
     return {"neighbours": NEIGHBOURS}
-
 
 # Function for forwarding a message to all neighbours
 # Basis of gossip protocol
@@ -113,12 +109,10 @@ def forwardMessage(command, json):
     for neighbour in NEIGHBOURS:
         requests.post(neighbour + command, json=json)
 
-
 # Wrapper for adding neighbours
 def addNeighbourByIPAndPort(IP, port):
     neighbour_string = "http://" + str(IP) + ":" + str(port)
     addNeighbourFromString(neighbour_string)
-
 
 # Function for adding neighbours
 def addNeighbourFromString(neighbour_string):
