@@ -3,7 +3,6 @@ import requests
 import os
 from time import time
 
-from hlc import HLC
 from copy import deepcopy
 
 FILENAME = "hello.txt"
@@ -42,7 +41,7 @@ def home():
         create_event = json.loads(content)
         
         unique_id = create_event['day'] + create_event['title']
-        noop = lww.addSet(unique_id, new_hlc)
+        op_success = lww.addSet(unique_id, new_hlc)
         
         json_obj.append(create_event)
 
@@ -102,7 +101,7 @@ def file():
     return {"error": "Request must be JSON"}, 415
 
 
-@app.route("/neighbours", method=["GET"])
+@app.route("/neighbours", methods=["GET"])
 def getNeighbours():
     return {"neighbours": NEIGHBOURS}
 
