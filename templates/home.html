@@ -225,14 +225,18 @@
           </select>
           <label style="font-size: 20px; margin: 5px;"><strong> 2022 </strong></label>
         </div>
-        <input class= "createbutton" type="submit" value="Add Event"/>
+        <input type="hidden" id="methodPost" name="method" value="POST">
+        <input class= "createbutton" type="submit" value="Add Event" />
       </form>
       <script type="text/javascript">
         myVar = addEvents({{data|tojson}})
       </script>
     </eventinfo>
-    <form action="{{ url_for('handleDelete') }}" method="post">
-        <button id="delete_button" class="deleteButton" name="delete" value=0 onclick="removeEvent()" disabled><strong>Remove Event</strong></button>
+    <form action="{{ url_for('home') }}" onsubmit="removeEvent()" method="post">
+      <input type="hidden" id="removeDay" name="removeDay" value="0">
+      <input type="hidden" id="removeTitle" name="removeTitle" value="0">
+      <input type="hidden" id="methodDelete" name="method" value="DELETE">
+      <input class= "deleteButton" id="delete_button" type="submit" value="Remove Event" disabled/>
     </form>
   </eventmanagement>
 </body>

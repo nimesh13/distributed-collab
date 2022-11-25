@@ -37,8 +37,6 @@ function addEvents(jsonString) {
 
 // Remove selected event
 function removeEvent() {
-
-    data = '{"day": "' + selected.getAttribute('name') + '", "title": "' +
-    selected.getAttribute('value') + '"}';
-    document.getElementById("delete_button").value = data;
+    document.getElementById("removeDay").value = selected.getAttribute('name');
+    document.getElementById("removeTitle").value = selected.getAttribute('value');
 }

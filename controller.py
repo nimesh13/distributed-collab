@@ -21,58 +21,30 @@ hlc = app.config.get('clock')
 def home():
     hlc = app.config.get('clock')
     lww = app.config.get('lww')
-    # Create json file if it doesn't exist
-    if not os.path.exists(filename):
-        with open(filename, 'w') as f:
-            json.dump([], f)
-
-    # Load local json
-    json_file = open(filename)
-    json_obj = json.load(json_file)
 
     # Append event(json object)
     if request.method == "POST":
-        content = json.dumps(request.form, indent=4)
+        event_method = request.form['method']
 
-        hlc.incr(int(time()))
-        new_hlc = deepcopy(hlc)
-        
-        create_event = json.loads(content)
-        
-        unique_id = getUniqueId(create_event)
-        op_success = lww.addSet(unique_id, new_hlc)
-        
-        json_obj.append(create_event)
+        if event_method == "POST":
+            content = json.dumps(request.form, indent=4)
 
-        # Update local json file
-        with open(filename, "w") as f:
-            json.dump(json_obj, f, indent=4, separators=(',', ': '))
+            hlc.incr(int(time()))
+            new_hlc = deepcopy(hlc)
+            
+            create_event = json.loads(content)
+            
+            unique_id = getUniqueId(create_event)
+            op_success = lww.addSet(unique_id, new_hlc)
 
-        return redirect(url_for('home'))
+            return redirect(url_for('home'))
+
+        elif event_method == "DELETE":
+            print("deleted")
+            return redirect(url_for('home'))
 
     # Render User Interface
     return render_template("home.html", data=lww.toJSON())
-
-@app.route("/delete", methods=["GET", "POST"])
-def handleDelete():
-    # Open local json file
-    json_file = open(filename)
-    json_obj = json.load(json_file)
-
-    # Get json from post request
-    data = request.form['delete']
-    objRemove = json.loads(data)
-
-    # Pop event(json object)
-    for idx, obj in enumerate(json_obj):
-        if obj['day'] == objRemove['day'] and obj['title'] == objRemove['title']:
-            json_obj.pop(idx)
-
-    # Update local replica
-    with open(filename, "w") as f:
-        json.dump(json_obj, f, indent=4, separators=(',', ': '))
-
-    return redirect(url_for('home'))
 
 @app.route("/health")
 def healthCheck():
