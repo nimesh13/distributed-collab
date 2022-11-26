@@ -1,17 +1,13 @@
-from flask import Flask, json, request, render_template
+from flask import Flask, json, request, render_template, Response
 import requests
 from time import time
-from utils import getUniqueId
+from utils import getEventId, genUniqueId
 from copy import deepcopy
-
-NODE_URL = "http://127.0.0.1:8002"
-
-# Tracking variables for gossip
-NEIGHBOURS = []
-RECEIVED_MESSAGE_IDS = []
+from constants import NEIGHBOURS, NODE_URL, MESSAGES
+from hlc import HLC
+from message import Message
 
 app = Flask(__name__)
-hlc = app.config.get('clock')
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -24,24 +20,47 @@ def home():
         new_hlc = deepcopy(hlc)
         event = json.loads(json.dumps(request.form))
         event_method = request.form['method']
-        
+
         if event_method == "POST":
-            unique_id = getUniqueId(event)
+            unique_id = getEventId(event)
             lww.addSet(unique_id, new_hlc)
         elif event_method == "DELETE":
-            unique_id = getUniqueId(event)
+            unique_id = getEventId(event)
             lww.removeSet(unique_id, new_hlc)
 
     # Render User Interface
-    return render_template("home.html", data=lww.toJSON())
+    return render_template("home.html", data=lww.setToJSONArr())
 
 @app.route("/health")
 def healthCheck():
     return "Alive", 200
 
-@app.route("/query")
-def queryNode():
-    return requests.get(NODE_URL + "/health").content
+@app.route("/receive", methods=["POST"])
+def receiveMsg():
+    request_body = request.json
+    msg_id = request_body['msg_id']
+    if msg_id not in MESSAGES:
+        hlc = app.config.get('clock')
+        lww = app.config.get('lww')
+        MESSAGES.add(msg_id)
+        
+        hlc.receive(HLC.unmarshal(request_body['ts']), int(time()))
+        lww.merge(request_body['add'], request_body['remove'])
+        
+        gossip('/sync', request_body)
+    return 'OK', 200
+
+@app.route("/forward", methods=["POST"])
+def forwardMsg():
+    hlc = app.config.get('clock')
+    lww = app.config.get('lww')
+
+    msg = Message(genUniqueId(), 
+                    lww.setToJSONObj(lww.add),
+                    lww.setToJSONObj(lww.remove),
+                    str(hlc)).toJSON()
+    gossip('/sync', msg)
+    # return Response(msg, mimetype='application/json')
 
 @app.route("/neighbours", methods=["GET"])
 def getNeighbours():
@@ -50,7 +69,7 @@ def getNeighbours():
 # Function for forwarding a message to all neighbours
 # Basis of gossip protocol
 # Should only be called if the node has not previously received the message before
-def forwardMessage(command, json):
+def gossip(command, json):
     for neighbour in NEIGHBOURS:
         requests.post(neighbour + command, json=json)
 
