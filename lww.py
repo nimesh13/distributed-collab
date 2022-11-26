@@ -59,9 +59,20 @@ class LWW:
         
         return operation
     
-    def toJSON(self):
+    def setToJSONArr(self):
         output= []
         for event in self.add.keys():
             output.append(getEvent(event))
         
         return dumps(output)
+    
+    def setToJSONObj(self, set):
+        output = {}
+        for event, ts in set.items():
+            output[event] = str(ts)
+        
+        return output
+    
+    @staticmethod
+    def fromJSON(add, remove):
+        return LWW(add, remove)
