@@ -1,4 +1,4 @@
-import uuid
+from uuid import uuid1
 import controller
 from controller import app
 import argparse
@@ -16,7 +16,7 @@ port = args.port
 host = args.host
  
 if __name__ == "__main__":
-    hlc = HLC(int(time()), uuid.uuid4())
+    hlc = HLC(int(time()), uuid1())
     lww = LWW()
     controller.NODE_URL = "http://" + str(host) + ":" + str(port)   # Makes the node URL consistent
     app.config['clock'] = hlc
