@@ -20,17 +20,17 @@ def home():
 
     # Append event(json object)
     if request.method == "POST":
-        event_method = request.form['method']
         hlc.incr(int(time()))
         new_hlc = deepcopy(hlc)
         event = json.loads(json.dumps(request.form))
+        event_method = request.form['method']
         
         if event_method == "POST":
             unique_id = getUniqueId(event)
-            op_success = lww.addSet(unique_id, new_hlc)
+            lww.addSet(unique_id, new_hlc)
         elif event_method == "DELETE":
             unique_id = getUniqueId(event)
-            op_success = lww.removeSet(unique_id, new_hlc)
+            lww.removeSet(unique_id, new_hlc)
 
     # Render User Interface
     return render_template("home.html", data=lww.toJSON())
