@@ -48,7 +48,16 @@ class LWW:
     
     def merge(self, add, remove) -> bool:
         operation = False
-        pass
+        for element, ts in enumerate(add):
+            noop = self.addSet(element, ts)
+            if noop and not operation:
+                operation = True
+        for element, ts in enumerate(remove):
+            noop = self.removeSet(element, ts)
+            if noop and not operation:
+                operation = True
+        
+        return operation
     
     def toJSON(self):
         output= []
