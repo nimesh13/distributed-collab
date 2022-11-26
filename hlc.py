@@ -2,18 +2,12 @@ from time import time
 from clock import Clock
 
 class HLC:
-    def __init__(self, pt: time, nodeid) -> None:
-        self.clock = Clock(pt, 0)
+    def __init__(self, pt: time, nodeid: str, lt: int=0) -> None:
+        self.clock = Clock(pt, lt)
         self.nodeid = nodeid
     
-    def marshal(self):
-        return self.clock.pt + ':' + self.clock.lt + ':' + self.nodeid
-    
-    def unmarshal(self, message: str):
-        split = message.split(':')
-        self.clock = Clock(split[0], split[1])
-        self.nodeid = split[2]
-        return self
+    def __str__(self):
+        return str(self.clock.pt) + ':' + str(self.clock.lt) + ':' + str(self.nodeid)
     
     def incr(self, now) -> None:
         if now > self.clock.pt:
@@ -47,3 +41,8 @@ class HLC:
         else:
             self.clock.pt = message.clock.pt
             self.clock.lt = message.clock.lt + 1
+    
+    @staticmethod
+    def unmarshal(message: str):
+        split = message.split(':')
+        return HLC(int(split[0]), split[2], int(split[1]))
