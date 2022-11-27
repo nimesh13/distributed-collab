@@ -101,7 +101,7 @@ def addNeighbourFromString(neighbour_string):
             NEIGHBOURS.append(n)
 
 def initiateConn(node_addr):
-    url = "http://0.0.0.0:" + node_addr + '/'
-    res = requests.post(url + 'initiate')
+    url = "http://0.0.0.0:" + node_addr
+    res = requests.post(url + '/initiate')
     if res.status_code is 200:
-        NEIGHBOURS.add(url)
+        addNeighbourFromString(url)
