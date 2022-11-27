@@ -6,6 +6,7 @@ from copy import deepcopy
 from constants import NEIGHBOURS, NODE_URL, MESSAGES
 from hlc import HLC
 from message import Message
+from lww import LWW
 
 app = Flask(__name__)
 
@@ -45,9 +46,10 @@ def receiveMsg():
         MESSAGES.add(msg_id)
         
         hlc.receive(HLC.unmarshal(request_body['ts']), int(time()))
-        lww.merge(request_body['add'], request_body['remove'])
+        msg_lww = LWW.fromJSON(request_body['add'], request_body['remove'])
+        lww.merge(msg_lww.add, msg_lww.remove)
         
-        gossip('/sync', request_body)
+        gossip('/receive', request_body)
     return 'OK', 200
 
 @app.route("/forward", methods=["POST"])
@@ -55,11 +57,12 @@ def forwardMsg():
     hlc = app.config.get('clock')
     lww = app.config.get('lww')
 
-    msg = Message(genUniqueId(), 
-                    lww.setToJSONObj(lww.add),
-                    lww.setToJSONObj(lww.remove),
-                    str(hlc)).toJSON()
-    gossip('/sync', msg)
+    msg = Message(msgid=genUniqueId(), 
+                    add=LWW.toJSON(lww.add),
+                    remove=LWW.toJSON(lww.remove),
+                    ts=str(hlc)).toJSON()
+    gossip('/receive', msg)
+    return 'OK', 200
     # return Response(msg, mimetype='application/json')
 
 @app.route("/neighbours", methods=["GET"])
