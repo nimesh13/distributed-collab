@@ -60,7 +60,7 @@ def forwardMsg():
     msg = Message(msgid=genUniqueId(), 
                     add=LWW.toJSON(lww.add),
                     remove=LWW.toJSON(lww.remove),
-                    ts=str(hlc)).toJSON()
+                    ts=str(hlc)).__dict__
     gossip('/receive', msg)
     return 'OK', 200
     # return Response(msg, mimetype='application/json')
@@ -69,12 +69,21 @@ def forwardMsg():
 def getNeighbours():
     return {"neighbours": NEIGHBOURS}
 
+@app.route("/initiate", methods=["POST"])
+def initiate():
+    url_root = request.url_root
+    if url_root not in NEIGHBOURS:
+        NEIGHBOURS.add(url_root)
+    
+    return 'OK', 200
+
 # Function for forwarding a message to all neighbours
 # Basis of gossip protocol
 # Should only be called if the node has not previously received the message before
-def gossip(command, json):
+def gossip(uri, body):
+    headers = {'Content-type': 'application/json'}
     for neighbour in NEIGHBOURS:
-        requests.post(neighbour + command, json=json)
+        requests.post(neighbour + uri, json=body, headers=headers)
 
 # Wrapper for adding neighbours
 def addNeighbourByIPAndPort(IP, port):
@@ -90,3 +99,9 @@ def addNeighbourFromString(neighbour_string):
     for n in new_neighbours:
         if n not in NEIGHBOURS:
             NEIGHBOURS.append(n)
+
+def initiateConn(node_addr):
+    url = "http://0.0.0.0:" + node_addr + '/'
+    res = requests.post(url + 'initiate')
+    if res.status_code is 200:
+        NEIGHBOURS.add(url)
