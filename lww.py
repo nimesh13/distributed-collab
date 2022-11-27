@@ -3,9 +3,9 @@ from utils import getEvent
 from json import dumps
 
 class LWW:
-    def __init__(self) -> None:
-        self.add = {}
-        self.remove = {}
+    def __init__(self, add={}, remove={}) -> None:
+        self.add = add
+        self.remove = remove
     
     def querySet(self, set, element: str) -> bool:
         return element in set
@@ -48,11 +48,11 @@ class LWW:
     
     def merge(self, add, remove) -> bool:
         operation = False
-        for element, ts in enumerate(add):
+        for element, ts in add.items():
             noop = self.addSet(element, ts)
             if noop and not operation:
                 operation = True
-        for element, ts in enumerate(remove):
+        for element, ts in remove.items():
             noop = self.removeSet(element, ts)
             if noop and not operation:
                 operation = True
@@ -66,7 +66,8 @@ class LWW:
         
         return dumps(output)
     
-    def setToJSONObj(self, set):
+    @staticmethod
+    def toJSON(set):
         output = {}
         for event, ts in set.items():
             output[event] = str(ts)
@@ -74,5 +75,11 @@ class LWW:
         return output
     
     @staticmethod
-    def fromJSON(add, remove):
+    def fromJSON(msg_add, msg_remove):
+        add, remove = {}, {}
+        for event, ts in msg_add.items():
+            add[event] = HLC.unmarshal(ts) 
+        for event, ts in msg_remove.items():
+            remove[event] = HLC.unmarshal(ts)
+        
         return LWW(add, remove)
