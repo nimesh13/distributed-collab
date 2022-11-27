@@ -16,7 +16,7 @@ port = args.port
 host = args.host
  
 if __name__ == "__main__":
-    hlc = HLC(int(time()), uuid1())
+    hlc = HLC(int(time()), str(uuid1()))
     lww = LWW()
     controller.NODE_URL = "http://" + str(host) + ":" + str(port)   # Makes the node URL consistent
     app.config['clock'] = hlc
