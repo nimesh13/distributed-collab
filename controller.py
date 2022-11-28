@@ -1,3 +1,4 @@
+from random import random
 from flask import Flask, json, request, render_template, Response
 import requests
 from time import time
@@ -96,7 +97,7 @@ def addNeighbourFromString(neighbour_string):
     new_neighbours_dict = requests.get(neighbour_string + "/neighbours").json()
     new_neighbours = new_neighbours_dict['neighbours']
     for n in new_neighbours:
-        if n not in NEIGHBOURS and n != NODE['URL']:
+        if n not in NEIGHBOURS and n != NODE['URL'] and random() < 5:
             NEIGHBOURS.add(n)
             initiateConn(n)
 
