@@ -1,4 +1,3 @@
-from abc import ABC
 from flask import Flask, json, request, render_template, Response
 import requests
 from time import time
@@ -99,13 +98,13 @@ def addNeighbourFromString(neighbour_string):
     for n in new_neighbours:
         if n not in NEIGHBOURS and n != NODE['URL']:
             NEIGHBOURS.add(n)
+            initiateConn(n)
 
-def initiateConn(node_addr):
-    url = "http://0.0.0.0:" + node_addr
+def initiateConn(neighbour, fetch_neighbours=False):
     msg = dict(addr=NODE['URL'])
-
     headers = {'Content-type': 'application/json'}
-    res = requests.post(url + '/initiate', json=msg, headers=headers)
+    res = requests.post(neighbour + '/initiate', json=msg, headers=headers)
     if res.status_code == 200:
-        NEIGHBOURS.add(url)
-        addNeighbourFromString(url)
+        NEIGHBOURS.add(neighbour)
+        if fetch_neighbours:
+            addNeighbourFromString(neighbour)
