@@ -6,14 +6,10 @@
 </head>
 
 <body>
-  <div class="sidebar">
-    <a class="active" href="#home">Calendar</a>
-    <a href="#meetings">Meetings</a>
-    <a href="#chatroom">Chat Room</a>
-  </div>
-
   <calendarbody>
-    <div><button class="button" type="button" name="connect_button"><strong>CONNECT</strong></button></div>
+    <form action="{{ url_for('forwardMsg') }}" method="post">
+      <input class= "button" id="connect_button" type="submit" value="CONNECT"/>
+    </form>
     <div class="calendar">
       <header>
           <h1 class="" style="flex: 1; font-size: 27px;"><span></span><strong>NOVEMBER 2022</strong></h1>
