@@ -1,9 +1,10 @@
+from abc import ABC
 from flask import Flask, json, request, render_template, Response
 import requests
 from time import time
 from utils import getEventId, genUniqueId
 from copy import deepcopy
-from constants import NEIGHBOURS, NODE_URL, MESSAGES
+from constants import NEIGHBOURS, MESSAGES, NODE
 from hlc import HLC
 from message import Message
 from lww import LWW
@@ -67,13 +68,14 @@ def forwardMsg():
 
 @app.route("/neighbours", methods=["GET"])
 def getNeighbours():
-    return {"neighbours": NEIGHBOURS}
+    resp = {"neighbours": list(NEIGHBOURS)}
+    return Response(json.dumps(resp), mimetype='application/json')
 
 @app.route("/initiate", methods=["POST"])
 def initiate():
-    url_root = request.url_root
-    if url_root not in NEIGHBOURS:
-        NEIGHBOURS.add(url_root)
+    request_body = request.json
+    if request_body['addr'] not in NEIGHBOURS:
+        NEIGHBOURS.add(request_body['addr'])
     
     return 'OK', 200
 
@@ -92,16 +94,18 @@ def addNeighbourByIPAndPort(IP, port):
 
 # Function for adding neighbours
 def addNeighbourFromString(neighbour_string):
-    if neighbour_string not in NEIGHBOURS:
-        NEIGHBOURS.append(neighbour_string)
     new_neighbours_dict = requests.get(neighbour_string + "/neighbours").json()
     new_neighbours = new_neighbours_dict['neighbours']
     for n in new_neighbours:
-        if n not in NEIGHBOURS:
-            NEIGHBOURS.append(n)
+        if n not in NEIGHBOURS and n != NODE['URL']:
+            NEIGHBOURS.add(n)
 
 def initiateConn(node_addr):
     url = "http://0.0.0.0:" + node_addr
-    res = requests.post(url + '/initiate')
-    if res.status_code is 200:
+    msg = dict(addr=NODE['URL'])
+
+    headers = {'Content-type': 'application/json'}
+    res = requests.post(url + '/initiate', json=msg, headers=headers)
+    if res.status_code == 200:
+        NEIGHBOURS.add(url)
         addNeighbourFromString(url)
