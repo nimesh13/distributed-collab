@@ -64,7 +64,7 @@ class LWW:
         for event, ts in self.add.items():
             output.append(getEvent(event, str(ts)))
         
-        sorted(output, key=lambda x: x['ts'])
+        output = sorted(output, key=lambda x: x['ts'])
         return dumps(output)
     
     @staticmethod
