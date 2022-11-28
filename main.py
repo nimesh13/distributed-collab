@@ -24,5 +24,5 @@ if __name__ == "__main__":
     app.config['clock'] = hlc
     app.config['lww'] = lww
     if CONNECT:
-        initiateConn(CONNECT)
+        initiateConn("http://" + NODE['HOST'] + ":" + CONNECT, fetch_neighbours=True)
     app.run(host=NODE['HOST'], port=NODE['PORT'])
