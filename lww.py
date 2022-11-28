@@ -61,9 +61,10 @@ class LWW:
     
     def setToJSONArr(self):
         output= []
-        for event in self.add.keys():
-            output.append(getEvent(event))
+        for event, ts in self.add.items():
+            output.append(getEvent(event, str(ts)))
         
+        sorted(output, key=lambda x: x['ts'])
         return dumps(output)
     
     @staticmethod
