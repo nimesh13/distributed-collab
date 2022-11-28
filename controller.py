@@ -63,7 +63,10 @@ def forwardMsg():
                     remove=LWW.toJSON(lww.remove),
                     ts=str(hlc)).__dict__
     gossip('/receive', msg)
-    return 'OK', 200
+    # return 'OK', 200
+    
+    # Render User Interface
+    return render_template("home.html", data=lww.setToJSONArr())
     # return Response(msg, mimetype='application/json')
 
 @app.route("/neighbours", methods=["GET"])
