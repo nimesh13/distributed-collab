@@ -15,21 +15,22 @@ You will need these things installed before you can use this application:
 
 Follow these steps to use this application locally:
 
-The default host is 0.0.0.0 - you don't have to mention it in the command line.
+The default host is 0.0.0.0 or localhost - you don't have to mention it in the command line.
+You should try both to see which works.
 
 1. `pip install -r requirements.txt`
 2. Start the first node in the network as:
     `python3 main.py`
-   This will start the node at default address:  http://0.0.0.0:8002
-3. Start the second node in the network at any other node, say 8003:
-    `python3 main.py --port=8003 --connect=8002`
-   This will start the node at address: http://0.0.0.0:8003 and
-   try to connect to the first node running at port 8002 to initiate a connection.
+   This will start the node at default address:  http://0.0.0.0:8000
+3. Start the second node in the network at any other node, say 8001:
+    `python3 main.py --port=8001 --connect_port=8000`
+   This will start the node at address: http://0.0.0.0:8001 and
+   try to connect to the first node running at port 8000 to initiate a connection.
    After the connection is established, the nodes will be added to each other's
    neighbours list
 4. Start consequent nodes using the same command after specifying the port 
    where it should start up and the node it should connect to.
-    `python3 main.py --port=8004 --connect=8003`
+    `python3 main.py --port=8002 --connect_port=8001`
 
 Follow these steps to use this application as a docker container:
 
