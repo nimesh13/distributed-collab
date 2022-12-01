@@ -9,7 +9,7 @@ Team Members:
 3. Kevin Prakash
 
 You will need these things installed before you can use this application:
-1. Python3
+1. python3 or python
 2. pip
 3. Docker
 
@@ -17,7 +17,7 @@ Follow these steps to use this application locally:
 
 The default host is 0.0.0.0 - you don't have to mention it in the command line.
 
-1. `pip install requirements.txt`
+1. `pip install -r requirements.txt`
 2. Start the first node in the network as:
     `python3 main.py`
    This will start the node at default address:  http://0.0.0.0:8002
